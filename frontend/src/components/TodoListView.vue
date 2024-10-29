@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import axios from 'axios';
 import { computed, onMounted, reactive, ref } from 'vue';
+import AxiosAdapter from '../infra/AxiosAdapter';
 
 const data = reactive<any>({ 
   todos: []
 })
 
 const description = ref("")
+
+const httpClient = new AxiosAdapter() 
 
 async function addItem() {
   const trimedDescription = description.value.trim()
@@ -21,19 +23,19 @@ async function addItem() {
 
   description.value = ""
 
-  await axios.post('http://localhost:3000/todos', item)
+  await httpClient.post('http://localhost:3000/todos', item)
 }
 
 async function removeItem(item: any) {
   data.todos.splice(data.todos.indexOf(item), 1)
 
-  await axios.delete(`http://localhost:3000/todos/${item.id}`)
+  await httpClient.delete(`http://localhost:3000/todos/${item.id}`)
 }
 
 async function toggleDone(item: any) {
   item.done = !item.done
 
-  await axios.put(`http://localhost:3000/todos/${item.id}`, item)
+  await httpClient.put(`http://localhost:3000/todos/${item.id}`, item)
 
 }
 
@@ -45,8 +47,7 @@ const completed = computed(() => {
 })
 
 onMounted(async () => {
-    const response = await axios.get("http://localhost:3000/todos")
-    data.todos = response.data
+  data.todos = await httpClient.get("http://localhost:3000/todos")
 })
 </script>
 
