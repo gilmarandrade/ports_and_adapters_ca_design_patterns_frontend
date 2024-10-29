@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, reactive, ref } from 'vue';
-import HttpClient from '../infra/HttpClient';
+import type TodoGateway from '../gateway/TodoGateway';
 
 const data = reactive<any>({ 
   todos: []
@@ -8,7 +8,7 @@ const data = reactive<any>({
 
 const description = ref("")
 
-const httpClient = inject('httpClient') as HttpClient 
+const todoGateway = inject('todoGateway') as TodoGateway 
 
 async function addItem() {
   const trimedDescription = description.value.trim()
@@ -23,19 +23,19 @@ async function addItem() {
 
   description.value = ""
 
-  await httpClient.post('http://localhost:3000/todos', item)
+  await todoGateway.addItem(item)
 }
 
 async function removeItem(item: any) {
   data.todos.splice(data.todos.indexOf(item), 1)
 
-  await httpClient.delete(`http://localhost:3000/todos/${item.id}`)
+  await todoGateway.removeItem(item.id)
 }
 
 async function toggleDone(item: any) {
   item.done = !item.done
 
-  await httpClient.put(`http://localhost:3000/todos/${item.id}`, item)
+  await todoGateway.updateItem(item)
 
 }
 
@@ -48,7 +48,7 @@ const completed = computed(() => {
 })
 
 onMounted(async () => {
-  data.todos = await httpClient.get("http://localhost:3000/todos")
+  data.todos = await todoGateway.getTodos()
 })
 </script>
 

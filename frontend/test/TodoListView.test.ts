@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils'
 import TodoListView from '../src/components/TodoListView.vue'
 import AxiosAdapter from '../src/infra/AxiosAdapter'
+import TodoHttpGateway from '../src/gateway/TodoHttpGateway'
 
 function sleep(mili: number) {
     return new Promise(resolve => {
@@ -9,10 +10,13 @@ function sleep(mili: number) {
 }
 
 test("deve testar a tela de todo list", async () => {
+    const httpClient = new AxiosAdapter()
+    const todoGateway = new TodoHttpGateway(httpClient, "http://localhost:3000")
+
     const wrapper = mount(TodoListView, {
         global: {
             provide: {
-                'httpClient': new AxiosAdapter()
+                todoGateway
             }
         }
     })
