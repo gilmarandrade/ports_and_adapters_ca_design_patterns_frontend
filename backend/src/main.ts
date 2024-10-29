@@ -15,4 +15,10 @@ app.get('/todos', function(req, res) {
     res.json(todos)
 })
 
+app.post('/todos', function(req, res) {
+    console.log('post', req.body)
+    todos.push(req.body)
+    res.end()
+})
+
 app.listen(3000)
