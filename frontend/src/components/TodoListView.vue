@@ -8,7 +8,7 @@ const data = reactive<any>({
 
 const description = ref("")
 
-function addItem() {
+async function addItem() {
   const trimedDescription = description.value.trim()
   if(!trimedDescription) return
 
@@ -16,8 +16,12 @@ function addItem() {
 
   if(data.todos.filter((item: any) => !item.done).length > 4) return
 
-  data.todos.push({description: trimedDescription, done: false})
+  const item = {description: trimedDescription, done: false}
+  data.todos.push(item)
+
   description.value = ""
+
+  await axios.post('http://localhost:3000/todos', item)
 }
 
 function removeItem(item: any) {
