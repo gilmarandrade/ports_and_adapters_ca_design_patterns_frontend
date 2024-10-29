@@ -30,8 +30,11 @@ async function removeItem(item: any) {
   await axios.delete(`http://localhost:3000/todos/${item.id}`)
 }
 
-function toggleDone(item: any) {
+async function toggleDone(item: any) {
   item.done = !item.done
+
+  await axios.put(`http://localhost:3000/todos/${item.id}`, item)
+
 }
 
 onMounted(async () => {
