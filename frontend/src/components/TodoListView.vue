@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios';
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 
 const data = reactive<any>({ 
   todos: []
@@ -37,14 +37,22 @@ async function toggleDone(item: any) {
 
 }
 
+const completed = computed(() => {
+  const total = data.todos.length
+  const done = data.todos.filter((item: any) => item.done).length
+
+  return Math.round((done/total) * 100)
+})
+
 onMounted(async () => {
-  const response = await axios.get("http://localhost:3000/todos")
-  data.todos = response.data
+    const response = await axios.get("http://localhost:3000/todos")
+    data.todos = response.data
 })
 </script>
 
 <template>
   <div v-if="data.todos.length == 0">No item</div>
+  <span class="completed">{{ completed }}%</span>
   <div v-for="item in data.todos">
     {{ item.id }}
     <span v-bind:style="{ 'text-decoration': item.done ? 'line-through' : ''}">{{ item.description }}</span> {{ item.done }}
