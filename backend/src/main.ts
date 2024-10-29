@@ -28,4 +28,12 @@ app.delete('/todos/:id', function(req, res) {
     res.end()
 })
 
+app.put('/todos/:id', function(req, res) {
+    const todo = todos.find(todo => todo.id == req.params.id)
+    if(todo) {
+        todo.done = req.body.done
+    }
+    res.end()
+})
+
 app.listen(3000)
