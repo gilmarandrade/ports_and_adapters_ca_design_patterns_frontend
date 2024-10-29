@@ -6,9 +6,9 @@ app.use(express.json())
 app.use(cors())
 
 const todos = [
-    { description: 'Estudar Typescript', done: true },
-    { description: 'Fazer a prova online', done: false },
-    { description: 'Cortar a grama', done: false }
+    { id: Math.random().toString(36).slice(2, 7), description: 'Estudar Typescript', done: true },
+    { id: Math.random().toString(36).slice(2, 7), description: 'Fazer a prova online', done: false },
+    { id: Math.random().toString(36).slice(2, 7), description: 'Cortar a grama', done: false }
 ]
 
 app.get('/todos', function(req, res) {

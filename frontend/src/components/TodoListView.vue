@@ -16,7 +16,7 @@ async function addItem() {
 
   if(data.todos.filter((item: any) => !item.done).length > 4) return
 
-  const item = {description: trimedDescription, done: false}
+  const item = { id: Math.random().toString(36).slice(2, 7), description: trimedDescription, done: false}
   data.todos.push(item)
 
   description.value = ""
@@ -24,8 +24,10 @@ async function addItem() {
   await axios.post('http://localhost:3000/todos', item)
 }
 
-function removeItem(item: any) {
+async function removeItem(item: any) {
   data.todos.splice(data.todos.indexOf(item), 1)
+
+  await axios.delete('http://localhost:3000/todos', item)
 }
 
 function toggleDone(item: any) {
@@ -41,6 +43,7 @@ onMounted(async () => {
 <template>
   <div v-if="data.todos.length == 0">No item</div>
   <div v-for="item in data.todos">
+    {{ item.id }}
     <span v-bind:style="{ 'text-decoration': item.done ? 'line-through' : ''}">{{ item.description }}</span> {{ item.done }}
 
     <button @click="removeItem(item)">remove</button>
