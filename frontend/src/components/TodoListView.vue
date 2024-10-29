@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
-import AxiosAdapter from '../infra/AxiosAdapter';
+import { computed, inject, onMounted, reactive, ref } from 'vue';
+import HttpClient from '../infra/HttpClient';
 
 const data = reactive<any>({ 
   todos: []
@@ -8,7 +8,7 @@ const data = reactive<any>({
 
 const description = ref("")
 
-const httpClient = new AxiosAdapter() 
+const httpClient = inject('httpClient') as HttpClient 
 
 async function addItem() {
   const trimedDescription = description.value.trim()
@@ -41,6 +41,7 @@ async function toggleDone(item: any) {
 
 const completed = computed(() => {
   const total = data.todos.length
+  if(total == 0) return 0
   const done = data.todos.filter((item: any) => item.done).length
 
   return Math.round((done/total) * 100)
