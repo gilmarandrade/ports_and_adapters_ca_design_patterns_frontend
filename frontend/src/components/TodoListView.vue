@@ -27,7 +27,7 @@ async function addItem() {
 async function removeItem(item: any) {
   data.todos.splice(data.todos.indexOf(item), 1)
 
-  await axios.delete('http://localhost:3000/todos', item)
+  await axios.delete(`http://localhost:3000/todos/${item.id}`)
 }
 
 function toggleDone(item: any) {

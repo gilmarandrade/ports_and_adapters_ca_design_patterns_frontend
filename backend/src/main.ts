@@ -16,8 +16,15 @@ app.get('/todos', function(req, res) {
 })
 
 app.post('/todos', function(req, res) {
-    console.log('post', req.body)
     todos.push(req.body)
+    res.end()
+})
+
+app.delete('/todos/:id', function(req, res) {
+    const todo = todos.find(todo => todo.id == req.params.id)
+    if(todo) {
+        todos.splice(todos.indexOf(todo), 1)
+    }
     res.end()
 })
 
