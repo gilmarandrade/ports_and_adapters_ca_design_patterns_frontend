@@ -2,7 +2,7 @@ import TodoList from "../entities/TodoList";
 import TodoGateway from "./TodoGateway";
 
 export default class TodoMemoryGateway implements TodoGateway {
-    todoList: any
+    todoList: TodoList
 
     constructor() {
         this.todoList = new TodoList([
@@ -17,21 +17,15 @@ export default class TodoMemoryGateway implements TodoGateway {
     }
     
     async addItem(item: any): Promise<any> {
-        this.todoList.push(item)
+        this.todoList.addItem(item)
     }
 
     async updateItem(item: any): Promise<any> {
-        const todo = this.todoList.find((todo: any) => todo.id == item.id)
-        if(todo) {
-            todo.done = item.done
-        }
+        this.todoList.toggleDone(item)
     }
     
     async removeItem(id: string): Promise<any> {
-        const todo = this.todoList.find((todo: any) => todo.id == id)
-        if(todo) {
-            this.todoList.splice(this.todoList.indexOf(todo), 1)
-        }
+        this.todoList.removeItem({ id })
     }
 
 }
