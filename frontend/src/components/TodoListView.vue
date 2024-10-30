@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { inject, onMounted, reactive, ref } from 'vue';
 import type TodoGateway from '../gateway/TodoGateway';
 import TodoList from '../entities/TodoList';
 
@@ -17,9 +17,10 @@ const todoGateway = inject('todoGateway') as TodoGateway
 
 
 
-// onMounted(async () => {
-//   data.todos = await todoGateway.getTodos()
-// })
+onMounted(async () => {
+  data.todoList = await todoGateway.getTodos()
+  console.log(data)
+})
 </script>
 
 <template>

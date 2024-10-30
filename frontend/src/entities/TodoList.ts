@@ -1,8 +1,17 @@
 export default class TodoList {
     items: any;
 
-    constructor() {
+    constructor(items?: any) {
         this.items = []
+        if(items) {
+            for(const item of items) {
+                this.items.push({
+                    id: item.id,
+                    description: item.description,
+                    done: item.done
+                })
+            }
+        }
     }
 
     async addItem(description: string) {
