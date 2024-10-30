@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-defineProps(["todoList"])
+const props = defineProps(["todoList"])
 
 const description = ref("")
+
+function handleInputEnter() {
+    props.todoList.addItem(description.value)
+    description.value = ""
+}
 </script>
 
 <template>
@@ -18,7 +23,7 @@ const description = ref("")
   </div>
   <hr />
   {{ description }}
-  <input type="text" v-model="description" @keyup.enter="todoList.addItem(description)"/>
+  <input type="text" v-model="description" @keyup.enter="handleInputEnter"/>
 </template>
 
 <style scoped>
