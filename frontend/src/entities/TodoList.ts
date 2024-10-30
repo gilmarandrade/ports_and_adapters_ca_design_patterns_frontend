@@ -1,7 +1,10 @@
-export default class TodoList {
+import Observable from "./Observable";
+
+export default class TodoList extends Observable {
     items: any;
 
     constructor(items?: any) {
+        super();
         this.items = []
         if(items) {
             for(const item of items) {
@@ -33,14 +36,18 @@ export default class TodoList {
             done: false,
         };
         this.items.push(item);
+
+        this.notify("addItem", item)
     }
 
     async removeItem(item: any) {
         this.items.splice(this.items.indexOf(item), 1);
+        this.notify("removeItem", item)
     }
 
     async toggleDone(item: any) {
         item.done = !item.done;
+        this.notify("toggleDone", item)
     }
 
     getItem(description: string) {

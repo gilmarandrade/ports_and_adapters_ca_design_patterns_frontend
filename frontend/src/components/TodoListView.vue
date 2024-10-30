@@ -2,10 +2,7 @@
 import { inject, onMounted, reactive, ref } from 'vue';
 import type TodoGateway from '../gateway/TodoGateway';
 import TodoList from '../entities/TodoList';
-
-// await todoGateway.addItem(item)
-// await todoGateway.removeItem(item.id)
-// await todoGateway.updateItem(item)
+import Observer from '../entities/Observer';
 
 const data = reactive<any>({ 
   todoList: new TodoList()
@@ -15,11 +12,19 @@ const description = ref("")
 
 const todoGateway = inject('todoGateway') as TodoGateway 
 
-
-
 onMounted(async () => {
-  data.todoList = await todoGateway.getTodos()
-  console.log(data)
+  const todoList = await todoGateway.getTodos()
+  todoList.register(new Observer("addItem", async (item: any) => {
+    await todoGateway.addItem(item)
+  }))
+  todoList.register(new Observer("removeItem", async (item: any) => {
+    await todoGateway.removeItem(item.id)
+  }))
+  todoList.register(new Observer("toggleDone", async (item: any) => {
+    await todoGateway.updateItem(item)
+  }))
+  
+  data.todoList = todoList
 })
 </script>
 
